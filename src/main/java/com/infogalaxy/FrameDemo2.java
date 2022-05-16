@@ -1,6 +1,8 @@
 package com.infogalaxy;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -17,8 +19,13 @@ public class FrameDemo2 {
     JCheckBox chkPan = new JCheckBox("Pan Card");
     JCheckBox chkLC = new JCheckBox("L.C.");
     JCheckBox chkTC = new JCheckBox("T.C.");
+    JLabel lblSelDoc = new JLabel("Selected :");
     JLabel lblItems = new JLabel("Select Item:");
-    JComboBox cmbItem = new JComboBox();
+    String[] items={"Select","Pen","Pencil","Book"};
+    JComboBox cmbItem = new JComboBox(items);
+    JTextField txtNewItem = new JTextField();
+    JButton btnNewItem = new JButton("ADD");
+    JButton btnDeleteItem = new JButton("DELETE");
     FrameDemo2() {
         genderView();
         docView();
@@ -63,8 +70,20 @@ public class FrameDemo2 {
     public void docView(){
         lblDoc.setBounds(20,100,150,30);
         panel.add(lblDoc);
+        lblSelDoc.setBounds(170,100,100,30);
+        panel.add(lblSelDoc);
         chkAdhar.setBounds(20,140,100,30);
         panel.add(chkAdhar);
+        chkAdhar.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(chkAdhar.isSelected()){
+                    lblSelDoc.setText("Aadhar Card");
+                } else {
+                    lblSelDoc.setText("Selected :");
+                }
+            }
+        });
         chkPan.setBounds(130,140,100,30);
         panel.add(chkPan);
         chkLC.setBounds(20,190,100,30);
@@ -76,10 +95,47 @@ public class FrameDemo2 {
         lblItems.setBounds(20,220,100,30);
         panel.add(lblItems);
         cmbItem.setBounds(20,260,100,30);
-        cmbItem.addItem("Pen");
-        cmbItem.addItem("Pencil");
-        cmbItem.addItem("Book");
+//        cmbItem.addItem("Pen");
+//        cmbItem.addItem("Pencil");
+//        cmbItem.addItem("Book");
         panel.add(cmbItem);
+        cmbItem.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println(cmbItem.getSelectedItem().toString());
+                System.out.println(cmbItem.getSelectedIndex());
+            }
+        });
+
+        txtNewItem.setBounds(130,260,100,30);
+        panel.add(txtNewItem);
+        btnNewItem.setBounds(130,300,100,30);
+        panel.add(btnNewItem);
+        btnNewItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(txtNewItem.getText().isEmpty()){
+                    //System.out.println("Please Enter the Item First");
+                    JOptionPane.showMessageDialog(frame,"Please Enter the Item Name");
+                } else {
+                    cmbItem.addItem(txtNewItem.getText());
+                    txtNewItem.setText("");
+                    txtNewItem.requestFocus();
+                }
+            }
+        });
+        btnDeleteItem.setBounds(240,300,80,30);
+        panel.add(btnDeleteItem);
+        btnDeleteItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(cmbItem.getSelectedItem().toString().equals("Select")){
+                    JOptionPane.showMessageDialog(frame,"Please Select the Valid Item");
+                } else {
+                    cmbItem.removeItem(cmbItem.getSelectedItem());
+                }
+            }
+        });
     }
 }
 class Main2{
